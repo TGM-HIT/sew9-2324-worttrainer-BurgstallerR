@@ -1,3 +1,7 @@
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 public class WordPair {
     private String word;
     private String url;
@@ -13,7 +17,10 @@ public class WordPair {
     }
 
     public boolean compare(String userWord, String userUrl){
-        return userWord.equals(word) && userUrl.equals(url);
+        if(userWord == null || userUrl == null) {
+            return false;
+        }
+        return userWord.equalsIgnoreCase(word) && userUrl.equals(url);
     }
 
     public String getUrl() {
