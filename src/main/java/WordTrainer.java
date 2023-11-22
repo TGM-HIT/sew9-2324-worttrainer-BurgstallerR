@@ -1,17 +1,24 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Ein WortTrainer welcher immer ein zufälliges Wort-Bild Paar generiert und dieses anzeigen lässt.
+ * Je nachdem ob die Eingabe des Benutzers richtig oder falsch ist werden auch dementsprechende Statistiken gespeichert
+ *
+ * @author Burgstaller Raffael
+ * @version 22.11.2023
+ */
 public class WordTrainer {
     private ArrayList<WordPair> pairList = new ArrayList<WordPair>();
     private int correctTries;
     private int wrongTries;
+    private SaveJson saveJson = new SaveJson();
 
     public WordTrainer() {
         pairList.add(new WordPair("Katze", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hauskatze_langhaar.jpg/1200px-Hauskatze_langhaar.jpg"));
@@ -53,6 +60,7 @@ public class WordTrainer {
     public void training() {
         Random r = new Random();
         boolean running = true;
+        loadWordTrainer();
         do {
             boolean guess = false;
             int rint = r.nextInt(pairList.size());
@@ -69,7 +77,39 @@ public class WordTrainer {
                 if(t.equals("")) {
                     running = false;
                 }
+                saveWordTrainer();
             }while(!guess && running);
         }while(running);
+    }
+
+    public void loadWordTrainer(){
+        int[] stats = saveJson.load();
+        if(stats[0] != -1 && stats[1] != -1) {
+            setCorrectTries(stats[0]);
+            setWrongTries(stats[1]);
+        }else {
+            setCorrectTries(0);
+            setWrongTries(0);
+        }
+    }
+
+    public void saveWordTrainer(){
+        saveJson.save(getCorrectTries(), getWrongTries());
+    }
+
+    public void setCorrectTries(int cTries) {
+        this.correctTries = cTries;
+    }
+
+    public int getCorrectTries() {
+        return correctTries;
+    }
+
+    public void setWrongTries(int wrongTries) {
+        this.wrongTries = wrongTries;
+    }
+
+    public int getWrongTries() {
+        return wrongTries;
     }
 }
