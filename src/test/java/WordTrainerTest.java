@@ -1,8 +1,12 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-import java.awt.image.BufferedImage;
-
+/**
+ * Eine Klasse welche den WortTrainer Testet.
+ *
+ * @author Burgstaller Raffael
+ * @version 22.11.2023
+ */
 public class WordTrainerTest {
 
     @Test
@@ -45,6 +49,19 @@ public class WordTrainerTest {
         WordPair pair = new WordPair("Katze", "https://example.com/cat.jpg");
         boolean result = pair.compare(null, "https://example.com/cat.jpg");
         Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void testSaveAndLoadWordTrainer() {
+        WordTrainer wordTrainer = new WordTrainer();
+        wordTrainer.setCorrectTries(5);
+        wordTrainer.setWrongTries(3);
+        wordTrainer.saveWordTrainer();
+        WordTrainer newWordTrainer = new WordTrainer();
+        newWordTrainer.loadWordTrainer();
+
+        Assertions.assertEquals(5, newWordTrainer.getCorrectTries());
+        Assertions.assertEquals(3, newWordTrainer.getWrongTries());
     }
 
 }

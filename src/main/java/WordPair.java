@@ -1,7 +1,9 @@
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
+/**
+ * Eine Klasse welches ein Wort-Bild Paar darstellt  und auch vergleichen kann.
+ *
+ * @author Burgstaller Raffael
+ * @version 10.11.2023
+ */
 public class WordPair {
     private String word;
     private String url;
