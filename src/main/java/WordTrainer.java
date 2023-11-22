@@ -20,11 +20,14 @@ public class WordTrainer {
     private int wrongTries;
     private SaveJson saveJson = new SaveJson();
 
+    public WordTrainer(ArrayList<WordPair> words, int correctTries, int wrongTries) {
+        this.pairList = words;
+        setCorrectTries(correctTries);
+        setWrongTries(wrongTries);
+    }
+
     public WordTrainer() {
-        pairList.add(new WordPair("Katze", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hauskatze_langhaar.jpg/1200px-Hauskatze_langhaar.jpg"));
-        pairList.add(new WordPair("Hund", "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Harzer_Fuchs_H%C3%BCndin_2.jpg/450px-Harzer_Fuchs_H%C3%BCndin_2.jpg"));
-        pairList.add(new WordPair("Giraffe", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Giraffen.jpg/450px-Giraffen.jpg"));
-        pairList.add(new WordPair("Adler", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Kaiseradler_Aquila_heliaca_e_amk.jpg/330px-Kaiseradler_Aquila_heliaca_e_amk.jpg"));
+        loadWordTrainer();
     }
 
     public String gui(String url) {
@@ -60,7 +63,6 @@ public class WordTrainer {
     public void training() {
         Random r = new Random();
         boolean running = true;
-        loadWordTrainer();
         do {
             boolean guess = false;
             int rint = r.nextInt(pairList.size());
@@ -83,10 +85,12 @@ public class WordTrainer {
     }
 
     public void loadWordTrainer(){
-        int[] stats = saveJson.load();
-        if(stats[0] != -1 && stats[1] != -1) {
-            setCorrectTries(stats[0]);
-            setWrongTries(stats[1]);
+
+        WordTrainer trainer = saveJson.load();
+        if(trainer.getCorrectTries() != -1 && trainer.getWrongTries() != -1) {
+            setCorrectTries(trainer.correctTries);
+            setWrongTries(trainer.wrongTries);
+            this.pairList = trainer.getPairList();
         }else {
             setCorrectTries(0);
             setWrongTries(0);
@@ -94,7 +98,7 @@ public class WordTrainer {
     }
 
     public void saveWordTrainer(){
-        saveJson.save(getCorrectTries(), getWrongTries());
+        saveJson.save(getCorrectTries(), getWrongTries(), pairList);
     }
 
     public void setCorrectTries(int cTries) {
@@ -111,5 +115,9 @@ public class WordTrainer {
 
     public int getWrongTries() {
         return wrongTries;
+    }
+
+    public ArrayList<WordPair> getPairList() {
+        return this.pairList;
     }
 }
